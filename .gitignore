@@ -1,0 +1,15 @@
+
+/vue-vant/node_modules
+/serve1/node_modules
+/vue-vant/dist
+/vue-vant/npm-debug.log*
+/vue-vant/yarn-debug.log*
+/vue-vant/yarn-error.log*
+/vue-vant/.idea
+/vue-vant/.vscode
+/vue-vant/*.suo
+/vue-vant/*.ntvs*
+/vue-vant/*.njsproj
+/vue-vant/*.sln
+/vue-vant/*.sw?
+

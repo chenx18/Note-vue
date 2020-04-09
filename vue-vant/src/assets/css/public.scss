@@ -1,0 +1,27 @@
+// SwipeCell 滑动单元格
+.van-swipe-cell {
+  .van-swipe-cell__wrapper {
+    .van-swipe-cell__left,
+    .van-swipe-cell__right {
+      display: inline-block;
+      width: 65px;
+      height: 44px;
+      font-size: 15px;
+      line-height: 44px;
+      color: #fff;
+      text-align: center;
+      background-color: #f44;
+    }
+    .van-cell-group,
+    .van-hairline--top-bottom{
+      .van-cell {
+        .van-cell__title {
+          text-align: left;
+        }
+        .van-cell__value {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
