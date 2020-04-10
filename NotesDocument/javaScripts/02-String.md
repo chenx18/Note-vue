@@ -68,7 +68,9 @@ str1.slice(1,5)         // ELLO
 'hello'.substr(1,2)     // el
 
 // 15. split()          把字符串分割为字符串数组。
-str1.split("")         // ["HELLO","WORD"]  用""将字符进行分割
+'str1'.split("")         // ["s", "t", "r", "1"]
+'str1'.split(" ")        // ["str1"]
+'str1 hfg'.split(" ")    // ["str1", 'hfg']
 
 // 16. trim()           去除字符串两边的空白
 str1.trim()             // HELLO WORD
