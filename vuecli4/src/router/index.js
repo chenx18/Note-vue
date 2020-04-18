@@ -11,17 +11,15 @@ const routes = [
     redirect: '/index',
     children: [
       {
-        FunId: 0,
         path: '/index',
         component: resolve => require(['@/views/home/home'], resolve),
         name: 'Home',
-        meta: {
-          FunId: 0,
-          menuName: '主页',
-          name: 'Home',
-          affix: true
-        },
         children: []
+      },
+      {
+        path: '/javascript',
+        component: resolve => require(['@/views/note'], resolve),
+        name: 'javascript',
       },
     ]
   },

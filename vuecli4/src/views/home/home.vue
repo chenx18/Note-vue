@@ -1,5 +1,5 @@
 <template>
-  <el-container class="conta">
+  <el-container class="content">
     <el-row class="main">
       Home
     </el-row>
@@ -25,17 +25,10 @@
   };
 </script>
 <style lang="scss" scoped>
-  .container {
+  .content {
     width: 100%;
-    height: 100%;
-    background: #f2f2f2;
-    overflow: auto;
-
-    .main {
-      width: calc(100% - 300px);
-      padding: 10px;
-      transition-duration: 0.2s;
-      box-sizing: border-box;
-    }
+    height: calc(100% - 55px);
+    overflow-y: hidden !important;
+    overflow-x: auto;
   }
 </style>

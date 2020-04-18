@@ -12,6 +12,18 @@ const config = {
   outputDir: 'dist', // 打包后的目录名称
   assetsDir: 'static', // 静态资源(js、css、img、fonts)目录
 
+  chainWebpack: config => {
+    config.module
+      .rule('md')
+      .test(/\.md$/)
+      .use('html-loader')
+      .loader('html-loader')
+      .end()
+      .use('markdown-loader')
+      .loader('markdown-loader')
+      .end()
+  },
+
   // webpack-dev-server 相关配置
   devServer: {
     open: false, // 自动打开浏览器
