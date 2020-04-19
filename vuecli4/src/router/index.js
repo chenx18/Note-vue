@@ -21,6 +21,11 @@ const routes = [
         component: resolve => require(['@/views/note'], resolve),
         name: 'javascript',
       },
+      {
+        path: '/editor',
+        component: resolve => require(['@/views/editor/editor'], resolve),
+        name: 'editor',
+      },
     ]
   },
  

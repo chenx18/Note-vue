@@ -1,6 +1,6 @@
 <template>
   <div class="content flexContainer">
-    <SideLeft :List="nodeArr"/>
+    <SideLeft :List="nodeArr" @selectItem="selectItem" />
     <div ref='md' class="markdown main" v-html="htmlMD"></div>
     <SideRight :List="nodeArr"></SideRight>
   </div>
@@ -22,7 +22,7 @@
       };
     },
     mounted() {
-      this.htmlMD = require('./../Set.md');
+      this.htmlMD = require('F:\\vueNode\\NotesDocument/nodes/sequelize-03.md');
       this.$nextTick(()=>{
         if (this.$refs.md) {
          this.nodeArr = this.createTree(this.$refs.md, []);
@@ -48,6 +48,14 @@
         }
         return nodeArr
       },
+
+      selectItem(val){
+        console.log(val)
+        if(val) {
+          // this.htmlMD = require (val);
+        }
+        
+      }
     },
     computed: {
 
@@ -64,6 +72,7 @@
     .main {
       padding: 10px 300px 10px 10px;
       overflow: auto;
+      flex: 1 auto;
     }
   }
 

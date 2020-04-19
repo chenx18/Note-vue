@@ -15,6 +15,7 @@
     components: {},
     data() {
       return {
+        
       };
     },
     mounted() {

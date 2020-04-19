@@ -4,15 +4,20 @@
       <h2 class="title">
         Javascript
       </h2>
-      <div class="item" v-for="(item,i) in List" :key="i">
+      <!-- <div class="item" v-for="(item,i) in List" :key="i">
         <a :href="'#'+item.label">{{item.label}}</a>
+      </div> -->
+      <div class="item" >
+        <el-tree :data="treeList"  :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </div>
+      
     </div>
   </div>
 
 </template>
 
 <script>
+  import jsons from '@/utils/tree.json'
   export default {
     name: "SideLeft",
     props: {
@@ -20,12 +25,25 @@
     },
     components: {},
     data() {
-      return {};
+      return {
+        treeList:[],
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        }
+      };
     },
     mounted() {
-
+      console.log(this.treeList)
+      this.treeList = jsons || [];
+      
     },
-    methods: {},
+    methods: {
+      handleNodeClick(data) {
+        console.log(data);
+        if(data.value) this.$emit('selectItem', data.value)
+      }
+    },
     computed: {}
   };
 

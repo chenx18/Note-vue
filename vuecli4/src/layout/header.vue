@@ -28,18 +28,19 @@
     },
     mounted() {
       this.navList= [
-        {label: 'JavaScript', value: 0, path:''},
+        {label: 'JavaScript', value: 0, path:'/javascript'},
         {label: 'HTML', value: 1, path:""},
         {label: 'VUE', value:2, path:''},
         {label: 'React', value:3, path:''},
         {label: 'Node', value:4, path:''},
         {label: 'UNIAPP', value:5, path:''},
+        // {label: '编辑', value:6, path:'/editor'},
       ]
     },
     methods: {
       handleNav(val) {
         this.navActive = val.value;
-        this.$router.push('/javascript');
+        this.$router.push(val.path);
       }
 
     },
