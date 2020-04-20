@@ -7,6 +7,7 @@ const basePath = path.join(__dirname, '../../../NotesDocument');
 function geFileList(path) {
   var filesList = [];
   var targetObj = {};
+  console.log(10,path)
   readFile(path, filesList, targetObj);
   return filesList;
 }
@@ -32,24 +33,25 @@ function readFile(path, filesList, targetObj) {
         };
         filesList.push(item);
       }
-
       readFile(path + '/' + file, filesList, item);
     } else {
+      console.log(7,path)
       //创建一个对象保存信息
       var obj = new Object();
       obj.size = states.size; //文件大小，以字节为单位
-      obj.name = file; //文件名
+      obj.name = file.replace('.md', ''); //文件名
       obj.path = path + '/' + file; //文件绝对路径
+      
 
       if (targetObj["children"]) {
         var item = {
-          name: file,
+          name: obj.name,
           value: obj.path
         }
         targetObj["children"].push(item);
       } else {
         var item = {
-          name: file,
+          name: obj.name,
           value: obj.path
         };
         filesList.push(item);
@@ -67,11 +69,11 @@ function writeFile(fileName, data) {
 }
 
 
-function createTree(){
+// function createTree(){
   let filesList = geFileList(basePath);
   let str = JSON.stringify(filesList);
   writeFile("tree.json", str);
-}
+// }
 
-export default createTree
+// export default createTree
 

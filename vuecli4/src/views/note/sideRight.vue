@@ -15,10 +15,16 @@
     components: {},
     data() {
       return {
-        
       };
     },
     mounted() {
+      const basedata ={
+        name: 'chenx18',
+        houseName: 'vueNode',
+      }
+      // https://api.github.com/repos/chenx18/vueNode   // 仓库信息
+      // https://api.github.com/repos/chenx18/vueNode/contents   // 获取某个repo的内容列表
+      // https://api.github.com/repos/chenx18/vueNode/contents/
      
     },
     methods: {

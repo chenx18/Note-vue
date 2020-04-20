@@ -36,7 +36,7 @@ const config = {
     },
     proxy: { // 代理
       '/api': {
-        target: 'http://cs.ep.eichong.com:2482/api', // 目标代理接口地址
+        target: 'https://github.com/', // 目标代理接口地址
         changeOrigin: true, // 开启代理
         pathRewrite: {
           '^/api': '/'

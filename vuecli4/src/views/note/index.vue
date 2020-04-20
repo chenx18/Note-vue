@@ -1,12 +1,15 @@
 <template>
   <div class="content flexContainer">
     <SideLeft :List="nodeArr" @selectItem="selectItem" />
+    <!-- <div ref='md' class="markdown main" v-html="htmlMD"></div> -->
     <div ref='md' class="markdown main" v-html="htmlMD"></div>
     <SideRight :List="nodeArr"></SideRight>
   </div>
 </template>
 
 <script>
+  import Api from '@/api/git';
+  import { restHtml } from '@/utils/reptile'
   import SideRight from './sideRight';
   import SideLeft from './sideLeft';
   export default {
@@ -22,7 +25,7 @@
       };
     },
     mounted() {
-      this.htmlMD = require('F:\\vueNode\\NotesDocument/nodes/sequelize-03.md');
+      // this.htmlMD = require('./../Set.md');
       this.$nextTick(()=>{
         if (this.$refs.md) {
          this.nodeArr = this.createTree(this.$refs.md, []);
@@ -36,7 +39,7 @@
           const node = els.childNodes[i];
           // 过滤 text 节点、script 节点
           if ((node.nodeType != 3) && (node.nodeName != 'SCRIPT')) {
-            let ar = ['h1','h2','h3','h4','h5','h6'];
+            let ar = ['h1','h2','h3','h4','h5','h6','a'];
             let name = node.nodeName.toLowerCase();
             let index = ar.findIndex(item => name === item);
             if(index !== -1) {
@@ -51,10 +54,19 @@
 
       selectItem(val){
         console.log(val)
-        if(val) {
-          // this.htmlMD = require (val);
-        }
-        
+        Api.getContent(val).then((res)=>{
+          console.log(res)
+          console.log(res.data)
+          if(res.status===200){
+            let html = res.data;
+            console.log(typeof(html))
+            var matchReg = '<article([\\s\\S]*)</article>';
+            console.log(html.match(matchReg));
+            this.htmlMD = html.match(matchReg)[0] || '';
+          }
+        }).catch((err)=>{
+          console.log(err);
+        })
       }
     },
     computed: {

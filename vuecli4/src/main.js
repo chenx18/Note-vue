@@ -5,8 +5,11 @@ import store from './store'
 import Element from 'element-ui'
 import './plugins/element.js'
 
+import axios from 'axios'
+Vue.prototype.$axios= axios
+
 Vue.config.productionTip = false
-Vue.use(Element);
+Vue.use(axios);
 
 new Vue({
   router,

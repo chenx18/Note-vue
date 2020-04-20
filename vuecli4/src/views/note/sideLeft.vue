@@ -17,6 +17,7 @@
 </template>
 
 <script>
+  import Api from '@/api/git'
   import jsons from '@/utils/tree.json'
   export default {
     name: "SideLeft",
@@ -36,9 +37,35 @@
     mounted() {
       console.log(this.treeList)
       this.treeList = jsons || [];
-      
+      this.getTree();
     },
     methods: {
+      getTree() {
+        Api.getMenJson().then(res => {
+          console.log(res)
+          if(res.status === 200) {
+            let data = res.data;
+            let html = data.match('<table([\\s\\S]*)</table>')[0];  // 截取部分htnl
+                html = html.replace(/\s*/g, "");     //去掉空格
+                html = html.replace(/<[^>]+>/g, "");   //去掉所有的html标记
+                html = html.replace(/↵/g, "");       //去掉所有的↵符号
+                html = html.replace(/[\r\n]/g, "")  //去掉回车换行
+                html = html.replace(/&quot;/g, "")  //去掉&quot;
+
+            let jsonStr = html.replace("{", "{\"");
+            jsonStr = jsonStr.replace(":", "\":\"");
+            jsonStr = jsonStr.replace(",", "\",\"");
+            jsonStr = jsonStr.replace("}", "\"}");
+            console.log(jsonStr)
+           
+            // console.log(JSON.parse(JSON.stringify(res3)))
+          }
+        })
+      },
+      matchReg(str){
+        let reg=/<\/?.+?\/?>/g;
+        console.log(str.replace(reg,''));
+      },
       handleNodeClick(data) {
         console.log(data);
         if(data.value) this.$emit('selectItem', data.value)
