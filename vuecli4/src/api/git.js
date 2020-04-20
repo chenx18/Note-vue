@@ -11,6 +11,11 @@ class api {
   getContent = url => {
     return http.get(`/api/chenx18/vueNode/blob/master/NotesDocument/${url}`, {});
   };  
+
+  // 获取内容
+  GetContent = url => {
+    return http.get('/api2/repos/chenx18/vueNode/git/blobs/d7a4d92921398273b292fa20aeee330d5478fe1d',{})
+  }
   // [api](https://segmentfault.com/a/1190000015144126)
   // 个人所有repo: https://api.github.com/users/用户名/repos     会得到一个repo的JSON格式列表
   // repo详细信息: https://api.github.com/repos/用户名/仓库名     repo的路径就开始和个人信息不同了。

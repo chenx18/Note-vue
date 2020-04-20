@@ -25,7 +25,7 @@
       };
     },
     mounted() {
-      // this.htmlMD = require('./../Set.md');
+      this.content()
       this.$nextTick(()=>{
         if (this.$refs.md) {
          this.nodeArr = this.createTree(this.$refs.md, []);
@@ -33,6 +33,7 @@
       })
     },
     methods: {
+      // 创建目录
       createTree(els, nodeArr) {
         nodeArr = []
         for (let i = 0;i < els.childNodes.length;i++) {
@@ -54,18 +55,21 @@
 
       selectItem(val){
         console.log(val)
-        Api.getContent(val).then((res)=>{
-          console.log(res)
-          console.log(res.data)
+        Api.getContent('javaScripts/02-String.md').then((res)=>{
           if(res.status===200){
             let html = res.data;
-            console.log(typeof(html))
-            var matchReg = '<article([\\s\\S]*)</article>';
-            console.log(html.match(matchReg));
-            this.htmlMD = html.match(matchReg)[0] || '';
+            let reg = '<article([\\s\\S]*)</article>';
+            this.htmlMD = html.match(reg)[0] || '';
+            console.log(this.htmlMD);
           }
         }).catch((err)=>{
           console.log(err);
+        })
+      },
+
+      content(){
+        Api.GetContent().then(res=>{
+          console.log(res);
         })
       }
     },
