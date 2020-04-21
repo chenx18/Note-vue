@@ -4,12 +4,12 @@ class api {
   constructor() {}
   // 获取json目录
   getMenJson = params => {
-    return http.get(`/api/chenx18/vueNode/blob/master/NotesDocument/tree.json`, params);
+    return http.get(`/api1/chenx18/vueNode/blob/master/NotesDocument/tree.json`, params);
   }
 
   // 获取详细内容
   getContent = url => {
-    return http.get(`/api/chenx18/vueNode/blob/master/NotesDocument/${url}`, {});
+    return http.get(`/api1/chenx18/vueNode/blob/master/NotesDocument/${url}`, {});
   };  
 
   // 获取内容

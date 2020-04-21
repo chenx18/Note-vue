@@ -1,77 +1,81 @@
 <template>
   <div class="content flexContainer">
-    <SideLeft :List="nodeArr" @selectItem="selectItem" />
-    <!-- <div ref='md' class="markdown main" v-html="htmlMD"></div> -->
-    <div ref='md' class="markdown main" v-html="htmlMD"></div>
-    <SideRight :List="nodeArr"></SideRight>
+    <!-- 菜单 -->
+    <div class="side-left">
+      <div class="box">
+        <h2 class="title">
+          Web
+        </h2>
+        <div class="menu-list" >
+          <el-tree :data="treeList"  :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        </div>
+      </div>
+    </div>
+    <!-- 内容 -->
+    <router-view v-if="isRouterAlive"/>
   </div>
 </template>
 
 <script>
-  import Api from '@/api/git';
-  import { restHtml } from '@/utils/reptile'
-  import SideRight from './sideRight';
-  import SideLeft from './sideLeft';
+  import jsons from '@/utils/tree.json'
   export default {
     name: "Note",
     components: {
-      SideRight,
-      SideLeft
     },
     data() {
       return {
-        htmlMD: '',
-        nodeArr: []
+        isRouterAlive: true,
+        treeList:[],
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        }
       };
     },
     mounted() {
-      this.content()
-      this.$nextTick(()=>{
-        if (this.$refs.md) {
-         this.nodeArr = this.createTree(this.$refs.md, []);
-        }
-      })
+      this.treeList = jsons || [];    // 本地菜单json
     },
     methods: {
-      // 创建目录
-      createTree(els, nodeArr) {
-        nodeArr = []
-        for (let i = 0;i < els.childNodes.length;i++) {
-          const node = els.childNodes[i];
-          // 过滤 text 节点、script 节点
-          if ((node.nodeType != 3) && (node.nodeName != 'SCRIPT')) {
-            let ar = ['h1','h2','h3','h4','h5','h6','a'];
-            let name = node.nodeName.toLowerCase();
-            let index = ar.findIndex(item => name === item);
-            if(index !== -1) {
-              let obj = {label: node.id, value: index};
-              nodeArr.push(obj);
-            }
-            this.createTree(node);
+
+      // 从github中获取菜单json
+      getTree() {
+        Api.getMenJson().then(res => {
+          if(res.status === 200) {
+            let data = res.data;
+            let html = data.match('<table([\\s\\S]*)</table>')[0];  // 截取部分htnl
+              html = html.replace(/\s*/g, "");        //去掉空格
+              html = html.replace(/<[^>]+>/g, "");    //去掉所有的html标记
+              html = html.replace(/↵/g, "");          //去掉所有的↵符号
+              html = html.replace(/[\r\n]/g, "")      //去掉回车换行
+              html = html.replace(/&quot;/g, '"')     //转义&quot;
+            console.log(typeof(JSON.parse(html)))
+            this.treeList = JSON.parse(html)
+          }
+        })
+      },
+
+      // 选择菜单项
+      handleNodeClick(data) {
+        if(data.url) {
+          if(data.size){
+            // this.$router.push({path:`/detail${data.url}`});
+            data.path = data.path.replace(/\\/g,'/');
+            this.$router.push({name:`detail`,params:{url: data.url, path:data.path}});
+            this.reload();
+          } else {
+            this.$message({type: 'info', message: '该文档为空白文档！'})
           }
         }
-        return nodeArr
       },
 
-      selectItem(val){
-        console.log(val)
-        Api.getContent('javaScripts/02-String.md').then((res)=>{
-          if(res.status===200){
-            let html = res.data;
-            let reg = '<article([\\s\\S]*)</article>';
-            this.htmlMD = html.match(reg)[0] || '';
-            console.log(this.htmlMD);
-          }
-        }).catch((err)=>{
-          console.log(err);
-        })
-      },
-
-      content(){
-        Api.GetContent().then(res=>{
-          console.log(res);
+      // 更新视图
+      reload(){
+        this.isRouterAlive = false;
+        this.$nextTick(()=> {
+          this.isRouterAlive = true;
         })
       }
+
     },
     computed: {
 
@@ -83,12 +87,46 @@
 <style lang='scss' scoped>
   .content {
     width: 100%;
-    height: calc(100% - 55px);
+    height: calc(100%  - 55px);
     overflow: hidden;
-    .main {
-      padding: 10px 300px 10px 10px;
-      overflow: auto;
-      flex: 1 auto;
+    .side-left {
+      padding: 20px;
+      box-sizing: border-box;
+      .box {
+        width: 280px;
+        height: 80%;
+        background: #fff;
+        border-radius: 5px;
+        border: 1px solid #3C8DBC;
+        box-shadow: 0 3px 8px 0 rgba(60, 141, 188, 0.2), 0 0 0 1px rgba(60, 141, 188, 0.08);
+        overflow: hidden;
+
+        .title {
+          margin: 0;
+          padding: 0 15px;
+          height: 40px;
+          line-height: 40px;
+          color: #fff;
+          background: #3c8dbc;
+        }
+        .menu-list {
+          overflow: auto;
+          height: calc(100% - 40px);
+          a {
+            font-size: 14px;
+            margin: 6px 0;
+            padding: 0 15px;
+            display: block;
+            text-decoration: none;
+            cursor: pointer;
+            color: #42A8E1;
+            &:hover {
+              color: #2a6496;
+              text-decoration: underline;
+            }
+          }
+        }
+      }
     }
   }
 

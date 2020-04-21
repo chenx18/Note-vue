@@ -17,9 +17,16 @@ const routes = [
         children: []
       },
       {
-        path: '/javascript',
+        path: '/doecs',
         component: resolve => require(['@/views/note'], resolve),
-        name: 'javascript',
+        name: 'doecs',
+        children: [
+          { 
+            path: '/detail/:url*',
+            component: resolve => require(['@/views/detailed/detail'], resolve),
+            name: 'detail',
+          }
+        ]
       },
       {
         path: '/editor',
@@ -30,6 +37,11 @@ const routes = [
   },
  
 ]
+
+function beforeRouteUpdate (to, from, next) {
+  console.log('routeUpdate：to=' + to.fullPath + ';from=' + from.fullPath)
+  next()
+}
 
 const router = new VueRouter({
   mode: 'history',

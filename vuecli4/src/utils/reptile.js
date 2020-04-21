@@ -1,10 +1,10 @@
+// 爬取内容
+
 const https = require('https')    // https用这个
 const fs = require('fs');
 const cheerio = require('cheerio');  // 解析爬取的html
-let basePath = 'https://github.com/chenx18/vueNode/tree/master/NotesDocument';
 
-let reptileMd = (url) =>{
-  console.log(url)
+function reptileMd(){
   https.get('https://github.com/chenx18/vueNode/blob/master/NotesDocument/javaScripts/04-Object.md', (res)=> {
     let data = '';
     res.on('data', (_d) => {
@@ -22,7 +22,7 @@ let reptileMd = (url) =>{
       // })
 
       // 获取markdown
-      let html = $('.Box-body article');
+      let html = $('.Box-body article').text().trim();
       console.log(html);
 
       // 写入文件
@@ -35,14 +35,4 @@ let reptileMd = (url) =>{
     console.log(err);
   });
 }
-let restHtml = (data) =>{
-  const $ = cheerio.load(data);
-  console.log($)
-  const html = $('.Box-body article');// 获取markdown
-  return html
-}
-export { 
-  reptileMd,
-  restHtml
-};
-
+reptileMd();

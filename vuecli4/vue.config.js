@@ -35,18 +35,18 @@ const config = {
       errors: true
     },
     proxy: { // 代理
-      '/api': {
+      '/api1': {
         target: 'https://github.com/', // 目标代理接口地址
         changeOrigin: true, // 开启代理
         pathRewrite: {
-          '^/api': '/'
+          '^/api1': '/'
         }
       },
       '/api2': {
         target: 'https://api.github.com/', // 目标代理接口地址
         changeOrigin: true, // 开启代理
         pathRewrite: {
-          '^/api': '/'
+          '^/api2': '/'
         }
       }
     }
