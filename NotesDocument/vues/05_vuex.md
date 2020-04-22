@@ -179,7 +179,7 @@ import {mapState, mapActions, mapGetters } from 'vuex'
 在vue例子中，通过click事件，触发methods中的方法。当存在异步是，而在vuex中需要dispatch来触发actions中方法，actions中的commit可以触发mutation中的方法同步。则直接在组价中commit触发vuex中的mutation中的方法
 ```
 
-![有actions](./../../assets/img/vue-img/vuex-actions.png)
+<!-- ![有actions](./../../assets/img/vue-img/vuex-actions.png) -->
 
 ***2.2 没有actions***
 <!-- ![没有actions](./../../assets/img/vue-img/13893707-46250b82c3161def.webp) -->

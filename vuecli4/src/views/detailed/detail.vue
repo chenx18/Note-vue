@@ -28,8 +28,8 @@
     mounted() {
       console.log(this.$route.params)
       let {url,path} = this.$route.params;
-      // if(path) this.loadMarkAsync(path)
-      if(url) this.handleContent(url)
+      if(path) this.loadMarkAsync(path)
+      // if(url) this.handleContent(url)
     },
     methods: {
       // 从github仓库中获取笔记内容
@@ -56,6 +56,7 @@
         import(`${val}`).then(res => {
           console.log(res)
           this.htmlMD = res.default;
+          this.refMd();
         })
       },
 
@@ -104,8 +105,8 @@
     watch:{
       param(val) {
         console.log(val)
-        this.handleContent(val.url);
-        // this.loadMarkAsync(val.path);
+        // this.handleContent(val.url);
+        this.loadMarkAsync(val.path);
       }
     }
   };

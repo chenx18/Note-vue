@@ -55,7 +55,7 @@ axios.spread(callback)
 - 请求拦截器（interceptors.requst）：可以拦截每次或指定HTTP请求，并可修改配置项；
 - 响应拦截器（interceptors.response）：可以在每次HTTP请求后拦截每次或指定HTTP请求，并可修改返回结果项；
   
-![拦截器工作流程](./../../assets/img/vue-img/13893707-46250b82c3161def.webp)
+<!-- ![拦截器工作流程](./../../assets/img/vue-img/13893707-46250b82c3161def.webp) -->
 
 ## 2. 安装axios
 

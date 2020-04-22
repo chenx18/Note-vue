@@ -27,7 +27,7 @@
 
 ## 3. 选择配置（自定义配置）
 
-![RUNOOB 图标](./../../assets/img/vue-img/2018101914002826.png)
+<!-- ![RUNOOB 图标](./../../assets/img/vue-img/2018101914002826.png) -->
 
 ## 4. 选择css预编译，这里我选择less
 
