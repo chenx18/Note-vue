@@ -58,9 +58,9 @@
       handleNodeClick(data) {
         if(data.url) {
           if(data.size){
-            // this.$router.push({path:`/detail${data.url}`});
             data.path = data.path.replace(/\\/g,'/');
             this.$router.push({name:`detail`,params:{url: data.url, path:data.path}});
+            // this.$router.push({path: data.url,params:{url: data.url, path:data.path}});
             this.reload();
           } else {
             this.$message({type: 'info', message: '该文档为空白文档！'})
