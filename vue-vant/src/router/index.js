@@ -59,4 +59,26 @@ export function resetRouter() {
   router.matcher = newRouter.matcher // reset router
 }
 
+router.beforeEach((to,from,next)=> {
+  console.log(to)
+  alert(to.name)
+  if(to.name !=='auth'){
+    
+    return;
+    // 判断当前是否新建的auth路由空白页面
+    let _token = sessionStorage.getItem('wechataccess_token');
+    if(!_token) {
+      // 如果没有token，则让它授权
+      // 保存当前路由地址，授权还会跳到此地址
+      sessionStorage.setItem('beforeUrl',to.fullPath);
+      // 授权请求，并跳转http://192.168.14.17/auth 路由页面
+      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx777aaa1aaaaa7a77&redirect_uri=http%3A%2F%2Fm.water.ui-tech.cn%2Fauth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+    }else {
+      next();
+    }
+  }else {
+    next();
+  }
+})
+
 export default router;

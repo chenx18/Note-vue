@@ -38,8 +38,8 @@ module.exports = {
   // },
   // 支持webPack-dev-server的所有选项
   devServer: {
-    host: "localhost",
-    port: 8068, // 端口号
+    host: "0.0.0.0",
+    port: 8082, // 端口号
     https: false, // https:{type:Boolean}
     open: true, //配置自动启动浏览器
     // proxy: 'http://localhost:4000' // 配置跨域处理,只有一个代理
@@ -48,7 +48,7 @@ module.exports = {
     // 配置多个代理
     proxy: {
       "/api": {
-        target: 'http://localhost:3000/api',  // target: 将所有以 /api 为开头的请求转发到 http://localhost:8088/api
+        target: 'http://localhost:3000',  // target: 将所有以 /api 为开头的请求转发到 http://localhost:8088/api
         changeOrigin: true,
         pathRewrite: {     // 重写地址。 '^/api': '' 表示将以 /api 开头的请求的地址中的 '/api' 替换为 ''           
           '^/api': ''
