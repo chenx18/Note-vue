@@ -1,12 +1,13 @@
 <template>
   <el-container class="content">
     <el-row class="main">
-      Home
+      <DatePicker/>
     </el-row>
   </el-container>
 </template>
 
-<script>;
+<script>
+  import DatePicker from '@/components/DatePicker'
   export default {
     name: "Home",
     data() {
@@ -21,7 +22,9 @@
     methods: {},
     computed: {},
     watch: {},
-    components: {}
+    components: {
+      DatePicker
+    }
   };
 </script>
 <style lang="scss" scoped>
