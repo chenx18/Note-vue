@@ -1,7 +1,7 @@
 <template>
   <el-container class="content">
     <el-row class="main">
-      <DatePicker/>
+      <DatePicker type="datetime" placeholder="请选择开始时间66" v-model="startDate"  />
     </el-row>
   </el-container>
 </template>
@@ -11,17 +11,23 @@
   export default {
     name: "Home",
     data() {
-      return {};
+      return {
+        startDate:'2012-07-06 02:03'
+      };
     },
     created() {
-    
+      
     },
     mounted() {
       
     },
     methods: {},
     computed: {},
-    watch: {},
+    watch: {
+      startDate(val) {
+        console.log(val)
+      }
+    },
     components: {
       DatePicker
     }

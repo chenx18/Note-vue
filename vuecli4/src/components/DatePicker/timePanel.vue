@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="hhmm" >
-      <div class="hh" v-if="dateType===4 && !show">
+      <div class="hh" v-if="!show">
         <a v-for="a in 24" :style="hhPst(a)" :key="a"
           :class="{active:a==parseInt(hhmm[0])}" @click="hhClick(a)">
           <span :style="hhtRt(a)">{{a==24?"00":a}}</span>
         </a>
         <span class="a-line" :style="hhlPst"></span>
       </div>
-      <div class="mm" v-if="dateType===4 && show">
+      <div class="mm" v-if="show">
         <a v-for="a in 59" :style="mmPst(a)" :key="a"
           :class="{active:a==parseInt(hhmm[1])}" @click="mmClick(a)">
           <span :style="mmtRt(a)">{{a<10 ?"0"+a:a}}</span>
@@ -25,23 +25,14 @@
 
 <script>
   export default {
-    name: 'ClockPanel',
+    name: 'TimePanel',
     props:{
-      'dateType':{
-        default:4
-      },
-      'HH':{
-        default: new Date().getHours()
-      },
-      'MM': {
-        default: new Date().getMinutes()
-      }
+      HHMM: Array,
     },
     data() {
       return {
-        hhmm: [],
-        val:'',
-        show: false
+        show: false,
+        hhmm: []
       };
     },
     mounted(){
@@ -78,8 +69,9 @@
       hhClick(val) {
         this.show = true;
         let h = val < 10 ? "0" + val : val
-        let m = new Date().getMinutes().toString().padStart(2,'0');
-        this.hhmm = [h,m];
+        // let m = new Date().getMinutes().toString().padStart(2,'0');
+        // this.hhmm = [h,m];
+        this.hhmm[0] = h;
         this.$emit('getHHmm',this.hhmm, 4)
       },
       // 分钟 选择
@@ -88,6 +80,7 @@
         this.hhmm[1] = val < 10 ? "0" + val : val;
         this.show = false;
         this.$emit('getHHmm',this.hhmm, 1)
+        this.$emit('close')
       },
       
     },
@@ -111,11 +104,12 @@
       }
     },
     watch: {
-      dateType:{
-        handler(newVal,oldVal){
-          this.hhmm=[this.HH,this.MM];
-        },
-        immediate: true
+      HHMM:{
+        handler(val){
+          this.hhmm = val;
+          // console.log(this.hhmm)
+				},
+				immediate: true
       }
     }
 
