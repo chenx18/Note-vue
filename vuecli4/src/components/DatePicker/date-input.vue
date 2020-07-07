@@ -12,7 +12,8 @@
 </template>
 
 <script>
-	import {formatDate} from '@/untils/date'
+	import {formatDate} from '@/utils/date'
+	import {getJulianDay,calendarToPersian,persianToGregorian} from '@/utils/Calendar'
 	import DateBox from './dateBox'
 	export default {
 		name: 'IDatePicker',
@@ -95,6 +96,11 @@
 		watch:{
 			value: {
 				handler(newval,oldval){
+					console.log(getJulianDay(newval))
+					const da = calendarToPersian('2020-07-07 18:30')
+					// https://cn.calcuworld.com/%E6%B3%A2%E6%96%AF%E6%97%A5%E5%8E%86
+					console.log(da)
+					console.log(persianToGregorian(da))
 					this.setCurrentValue(newval);
 				},
 				immediate: true

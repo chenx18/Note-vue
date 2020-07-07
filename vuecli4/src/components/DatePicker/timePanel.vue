@@ -69,7 +69,7 @@
       // 时 选择
       hhClick(val) {
         this.show = true;
-        let h = val < 10 ? "0" + val : val
+        let h = val===24? 0 :(val < 10 ? "0" + val : val)
         // let m = new Date().getMinutes().toString().padStart(2,'0');
         // this.hhmm = [h,m];
         this.hhmm[0] = h;
@@ -78,7 +78,7 @@
       // 分钟 选择
       mmClick(val) {
         if (val > 0)
-        this.hhmm[1] = val < 10 ? "0" + val : val;
+        this.hhmm[1] = val===24?0:(val < 10 ? "0" + val : val)
         this.show = false;
         this.$emit('getHHmm',this.hhmm, 1)
         this.$emit('close')
@@ -87,6 +87,7 @@
     },
     computed:{
       hhlPst(){
+        console.log(this.hhmm[0])
         let hh = parseInt(this.hhmm[0]);
         let h12 = hh<13 ? hh : hh-12;
         let rt = (h12-1)*30-60;
