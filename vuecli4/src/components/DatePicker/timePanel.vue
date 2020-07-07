@@ -11,7 +11,7 @@
       <div class="mm" v-if="show">
         <a v-for="a in 59" :style="mmPst(a)" :key="a"
           :class="{active:a==parseInt(hhmm[1])}" @click="mmClick(a)">
-          <span :style="mmtRt(a)">{{a<10 ?"0"+a:a}}</span>
+          <span :style="mmtRt(a)">{{a < 10 ? "0"+a : a}}</span>
         </a>
         <a :style="mmPst(0)" 
           :class="{active:hhmm[1]=='00'}" @click="mmClick(0)">
@@ -36,6 +36,7 @@
       };
     },
     mounted(){
+      // console.info('timePanel',this.$attrs);
     },
     methods: {
       hhPst(i) {
@@ -123,7 +124,7 @@
 	position: relative;
 	background: #ebebeb;
 	border-radius: 120px;
-	margin: 17px;
+	margin: 7px auto 11px
 }
 .hh, .mm {
 	position: absolute;
@@ -133,6 +134,7 @@
 	margin-top: -15px;
 }
 .hh>a, .mm>a {
+  cursor: Default;
 	position: absolute;
 	width: 30px;
 	height: 30px;

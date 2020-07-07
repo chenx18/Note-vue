@@ -1,25 +1,38 @@
 <template>
-  <div class="calendar" v-if="show" @blur="$emit('dateBlur')" @mousedown="$emit('dateMD')">
+  <div class="calendar" :class="dateType===4?'timepan':''" v-if="show" @mousedown="$emit('dateMD')" >
     <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
     <div class="calendar__header">
       <div class="header__pre" @click="handlePreMonth"></div>
       <div class="header__title">
-        {{Year}}/{{Month.toString().padStart(2,"0")}}/{{Day.toString().padStart(2,"0")}}
+				<a @click="dateType=1">
+					{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}}
+				</a>
+				<a v-if="types ==='datetime'" @click="dateType=4">
+					{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}
+				</a>
       </div>
       <div class="header__next" @click="handleNextMonth"></div>
     </div>
 
     <!-- 日历 -->
-    <DatePanel v-if="dateType===1" :Year="Year" :Day="Day" :Month="Month" @handleDay="handleDay"/>
+    <DatePanel v-if="dateType===1" :YMD="{Year,Month,Day}" @handleDay="handleDay" v-bind="$attrs"/>
 
     <!-- 时钟 -->
-    <TimePanel v-else @getHHmm="getHHmm" :HHMM="[Hour,Minute]"/>
+    <TimePanel v-else-if="dateType!==1&&types==='datetime'" @getHHmm="getHHmm" :HHMM="[Hour,Minute]" v-bind="$attrs"/>
 
     <!-- 确定 -->
     <div class="ymdhmsave" >
-      <a @click="dateType=1">{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}}</a>
-      <a @click="dateType=4">{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}</a>
-      <a @click="mmClick(1)">确定</a>
+			<div class="ymdhm">
+				<!-- <a @click="dateType=1">
+					{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}}
+				</a>
+				<a v-if="types ==='datetime'" @click="dateType=4">
+					{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}
+				</a> -->
+			</div>
+			<div class="btm" > 
+				<span @click="mmClick(1)">确定</span>
+			</div>
     </div>
   </div>
 </template>
@@ -29,15 +42,12 @@
 	import TimePanel from './timePanel'
 	export default {
 		name: 'DateBox',
+		inheritAttrs: false,
     props: {
       value: {
         type: String,
         default: ''
       },
-      type: {
-        type: String,
-        default: 'text'
-			},
 			show:{
 				type: Boolean,
 			}
@@ -54,18 +64,19 @@
 			};
 		},
 		mounted(){
-			
 		},
 
 		methods: {
+			// 初始化时间
 			initData(val){
-				if(val){
-					const {year, month, day, hour, minute } = this.date_sort(val);
-					this.Year = year
-					this.Month = month
-					this.Day = day
-					this.Hour = hour
-					this.Minute = minute
+				let time = Date.parse(val);
+				if(time) {
+					let {Year,Month,Day,Hour,Minute} = this.timestampToTime(time)
+					this.Year = Year;
+					this.Month = Month;
+					this.Day = Day;
+					this.Hour = Hour;
+					this.Minute = Minute;
 				}else{
 					const date = new Date();
 					this.Year = date.getFullYear();
@@ -73,27 +84,19 @@
 					this.Day = date.getDate();
 					this.Hour = date.getHours();
 					this.Minute = date.getMinutes();
-					// console.log(this.Year,this.Month,this.Day,this.Hour,this.Minute)
 				}
 			},
 
-			// 时间处理 {year: 2020, month: 7, day: 6, hour: 15, minute: 30, …}
-			date_sort(date){
-				var time={};
-				var f = date.split(' ', 2);//过滤空格
-				if(f[0].search("/") != -1){//判断是否包含-
-						var d = (f[0] ? f[0] : '').split('/', 3);//过滤-
-				}else {
-						var d = (f[0] ? f[0] : '').split('-', 3);//过滤-
-				}
-				time.year=parseInt(d[0]);//转换成整数形式的原因是 过滤掉 月份和时分秒的首位补零的情况
-				time.month=parseInt(d[1]);
-				time.day=parseInt(d[2]);
-				var t = (f[1] ? f[1] : '').split(':', 3);//过滤:
-				time.hour=parseInt(t[0]);
-				time.minute=parseInt(t[1]);
-				time.second=parseInt(t[2]);
-				return time;
+			// 时间搓转日期格式
+			timestampToTime (timestamp){
+				let date = new Date(timestamp);
+				let Year = date.getFullYear();
+				let Month = (date.getMonth()+1);
+				let Day = date.getDate();
+				let Hour = date.getHours();
+				let Minute = date.getMinutes();
+				let obj = {Year,Month,Day,Hour,Minute}
+				return obj
 			},
 
 			// 上一个月
@@ -125,8 +128,15 @@
 			// 选择日
 			handleDay(val) {
 				this.Day = val;
-				this.dateType = 4;
-				this.mmClick()
+				if(this.types === 'datetime'){
+					this.dateType = 4;
+					this.mmClick()
+				}else{
+					this.Hour = 0;
+					this.Minute = 0;
+					this.mmClick(1)
+				}
+				
 			},
 
 			// 选择时分
@@ -140,16 +150,22 @@
 			// 确定
 			mmClick(type){
 				const {Year,Month,Day,Hour,Minute}=this;
-				let value = Year+'-'+Month.toString().padStart(2,"0")+'-'+Day.toString().padStart(2,"0")+' '+Hour.toString().padStart(2,"0")+':'+Minute.toString().padStart(2,"0");
-				if( type && type=== 1 ) this.dateType = 1;
+				let value = Year + '-'
+					+ Month.toString().padStart(2,"0") + '-'
+					+ Day.toString().padStart(2,"0") + ' '
+					+ Hour.toString().padStart(2,"0") + ':'
+					+ Minute.toString().padStart(2,"0");
+				this.dateType = type&&type===1? 1 : this.dateType;
 				this.$emit('submint',value, type)
-				
+				// console.log(value)
+				// console.log(this.dateType)
 			},
-			
 		},
-		components:{
-      DatePanel,
-			TimePanel
+		computed: {
+			// 组件类型: 日历+时间（datetime） or 日历（date）
+			types() {
+				return this.$attrs&&this.$attrs.types || 'datetime'
+			}
 		},
 		watch:{
 			value: {
@@ -159,70 +175,28 @@
 				},
 				immediate: true
 			}
-		}
+		},
+		components:{
+      DatePanel,
+			TimePanel
+		},
 	};
 </script>
 
 <style lang="scss" scope>
-	.date_box {
-		// display: flex;
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 999;
-	}
-	.input_box{
-		position: relative;
-		font-size: 14px;
-		display: inline-block;
-		&:after{
-			content: "";
-			clear: both;
-    }
-		.input__prefix{
-			height: 100%;
-			text-align: center;
-			position: absolute;
-			left: 5px;
-			top: 0;
-			color: #c0c4cc;
-			transition: all .3s;
-			i{
-				display: inline-block;
-				line-height: 28px;
-				text-align: center;
-			}
-		}
-		input{
-			-webkit-appearance: none;
-			background-color: #fff;
-			background-image: none;
-			border-radius: 4px;
-			border: 1px solid;
-			border-color: #67c23a;
-			box-sizing: border-box;
-			color: #606266;
-			display: inline-block;
-			font-size: inherit;
-			height: 28px;
-			line-height: 40px;
-			outline: none;
-			padding: 0 15px 0 30px;
-			transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-			width: 100%;
-		}
-		
-	}
-	
 	.calendar {
-		width: 100%;
-		height: 100%;
+		position: absolute;
+		width: 326px;
 		color: #606266;
 		border: 1px solid #e4e7ed;
 		border-radius: 4px;
 		box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
 		background-color: #fff;
-		margin: 5px 0;
+		margin: 7px 0;
+		z-index: 99999;
+		&.timepan{
+			width: 255px;
+		}
 		.calendar__header {
 			margin: 12px;
 			text-align: center;
@@ -233,7 +207,12 @@
 
 			.header__title {
 				font-size: 16px;
-				letter-spacing: 1px;
+				font-weight: 500;
+				padding: 0 5px;
+				line-height: 22px;
+				text-align: center;
+				cursor: pointer;
+    		color: #606266;
 			}
 
 			.header__pre {
@@ -278,92 +257,53 @@
 				}
 			}
 		}
-		.calendar__main {
-			width: 292px;
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
-			position: relative;
-			margin: 15px;
-			.main_block-head {
-				width: 100%;
-				height: 40px;
-				margin-bottom: 15px;
-				display: flex;
-				justify-content: center;
-				font-size: 12px;
-
-				.block_head_item {
-					height: 30px;
-					width: 30px;
-					line-height: 30px;
-					text-align: center;
-					padding: 5px;
-					color: #606266;
-					font-weight: 400;
-					border-bottom: solid 1px #EBEEF5;
-				}
-			}
-
-			.main_date {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-wrap: wrap;
-
-				.date_item {
-					height: 31px;
-					width: 41px;
-					padding: 4px 0;
-					box-sizing: border-box;
-					text-align: center;
-					cursor: pointer;
-					position: relative;
-
-					span {
-						width: 24px;
-						height: 24px;
-						display: block;
-						margin: 0 auto;
-						line-height: 24px;
-						position: absolute;
-						left: 50%;
-						-webkit-transform: translateX(-50%);
-						transform: translateX(-50%);
-					}
-				}
-
-				.date_item_not {
-					color: #7f8fa4;
-				}
-
-				.date_item_today {
-					border-radius: 50%;
-					transition: 0.5s all;
-					color: #FFF;
-					background-color: #409EFF;
-					box-shadow: 0 2px 6px rgba(171, 171, 171, 0.5);
-				}
-			}
-
-
-		}
 		.ymdhmsave{
+			width: 100%;
 			height: 41px;
 			border-top: 1px solid #bbb;
 			line-height: 40px;
 			display: flex;
 			justify-content: space-around;
-			a {
-				padding: 0 10px;
-				&:nth-child(2) {
-					margin-right: 20px;
+			.ymdhm{
+				width: 70%;
+				text-align: center;
+				overflow: hidden;
+				a {
+					cursor: pointer;
+					padding: 10px;
 				}
+			}
+			
+			.btm{
+				width: 30%;
+				text-align: center;
+				overflow: hidden;
+				span {
+					cursor: pointer;
+					display: inline-block;
+					font-size: 12px;
+					padding: 7px 15px;
+					line-height: 1;
+					text-align: center;
+					border: 1px solid #DCDFE6;
+					border-radius: 4px;
+					color: #606266;
+					background: #FFF;
+					box-sizing: border-box;
+					white-space: nowrap;
+					outline: 0;
+					&:hover {
+						background: #FFF;
+						border-color: #409EFF;
+						color: #409EFF;
+					}
+				}
+				
 			}
 		}
 		.popper__arrow{
 			position: absolute;
-			top: 19px;
+			top: -16px;
 			left: 50px;
 			&:after,&:before{
 				position: absolute;
@@ -374,11 +314,11 @@
 				border-bottom: 10px #fff solid;
 			}
 			&:before{
-				border-bottom: 10px #e4e7ed solid;
+				border-bottom: 6px #e4e7ed solid;
 			}
 			&:after{
 				top: 1px; /*覆盖并错开1px*/
-				border-bottom: 10px #fff solid;
+				border-bottom: 6px #fff solid;
 			}
 		}
 	}

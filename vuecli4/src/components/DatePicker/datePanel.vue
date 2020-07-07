@@ -6,8 +6,8 @@
     </ul>
     <ul class="main_date">
       <li class="date_item" @click="handleDayClick(item)"
-        v-for="(item, index) in displayDaysPerMonthT(Year)[Month-1]" :key="item.type + item.content + `${index}`">
-        <span :class="` ${(item.type === 'pre' || item.type === 'next') ? 'date_item_not' : ''} ${(item.content === Day && item.type === 'normal') && 'date_item_today'}`">
+        v-for="(item, index) in displayDaysPerMonthT(YMD.Year)[YMD.Month-1]" :key="item.type + item.content + `${index}`">
+        <span :class="` ${(item.type === 'pre' || item.type === 'next') ? 'date_item_not' : ''} ${(item.content === YMD.Day && item.type === 'normal') && 'date_item_today'}`">
           {{item.content}}
         </span>
       </li>
@@ -19,9 +19,7 @@
 	export default {
 		name: 'DatePanel',
     props: {
-      Year: [String, Number],
-      Month: [String, Number],
-      Day: [String, Number],
+      YMD: Object,
     },
 		data() {
 			return {
@@ -29,6 +27,7 @@
 			};
 		},
 		mounted(){
+      console.info('datePanel',this.$attrs);
 		},
 
 		methods: {

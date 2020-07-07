@@ -1,18 +1,17 @@
 <template>
   <el-container class="content">
     <el-row class="main">
-      <DatePicker type="datetime" placeholder="请选择开始时间66" v-model="startDate"  />
+      <vk-date-picker v-model="startDate" types="datetime" placeholder="请选择开始时间" />
     </el-row>
   </el-container>
 </template>
 
 <script>
-  import DatePicker from '@/components/DatePicker'
   export default {
     name: "Home",
     data() {
       return {
-        startDate:'2012-07-06 02:03'
+        startDate: ''
       };
     },
     created() {
@@ -29,7 +28,6 @@
       }
     },
     components: {
-      DatePicker
     }
   };
 </script>
