@@ -17,15 +17,29 @@
 /vuecli4/.DS_Store
 /vuecli4/node_modules
 /vuecli4/dist
-
-# local env files
 /vuecli4/.env.local
 /vuecli4/.env.*.local
-
-# Log files
 /vuecli4/npm-debug.log*
 /vuecli4/yarn-debug.log*
 /vuecli4/yarn-error.log*
+
+/vue-study-web20/.DS_Store
+/vue-study-web20/node_modules
+/vue-study-web20/dist
+/vue-study-web20/.env.local
+/vue-study-web20/.env.*.local
+/vue-study-web20/npm-debug.log*
+/vue-study-web20/yarn-debug.log*
+/vue-study-web20/yarn-error.log*
+
+/vue-study-01/.DS_Store
+# /vue-study-01/node_modules
+/vue-study-01/dist
+/vue-study-01/.env.local
+/vue-study-01/.env.*.local
+/vue-study-01/npm-debug.log*
+/vue-study-01/yarn-debug.log*
+/vue-study-01/yarn-error.log*
 
 # Editor directories and files
 .idea

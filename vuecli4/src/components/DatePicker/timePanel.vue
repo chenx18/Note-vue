@@ -3,7 +3,7 @@
     <div class="hhmm" >
       <div class="hh" v-if="!show">
         <a v-for="a in 24" :style="hhPst(a)" :key="a"
-          :class="{active:a==parseInt(hhmm[0])}" @click="hhClick(a)">
+          :class="{active:a == (parseInt(hhmm[0])===0?24:parseInt(hhmm[0]))}" @click="hhClick(a)">
           <span :style="hhtRt(a)">{{a==24?"00":a}}</span>
         </a>
         <span class="a-line" :style="hhlPst"></span>
@@ -36,7 +36,6 @@
       };
     },
     mounted(){
-      // console.info('timePanel',this.$attrs);
     },
     methods: {
       hhPst(i) {
@@ -77,8 +76,8 @@
       },
       // 分钟 选择
       mmClick(val) {
-        if (val > 0)
-        this.hhmm[1] = val===24?0:(val < 10 ? "0" + val : val)
+        // if (val > 0)
+        this.hhmm[1] = val < 10 ? "0" + val : val
         this.show = false;
         this.$emit('getHHmm',this.hhmm, 1)
         this.$emit('close')
@@ -87,7 +86,6 @@
     },
     computed:{
       hhlPst(){
-        console.log(this.hhmm[0])
         let hh = parseInt(this.hhmm[0]);
         let h12 = hh<13 ? hh : hh-12;
         let rt = (h12-1)*30-60;
@@ -109,7 +107,6 @@
       HHMM:{
         handler(val){
           this.hhmm = val;
-          // console.log(this.hhmm)
 				},
 				immediate: true
       }

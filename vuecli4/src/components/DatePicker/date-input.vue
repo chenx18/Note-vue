@@ -96,8 +96,8 @@
 		watch:{
 			value: {
 				handler(newval,oldval){
-					console.log(getJulianDay(newval))
-					const da = calendarToPersian('2020-07-07 18:30')
+					console.log('newval:' + newval)
+					const da = calendarToPersian(newval)
 					// https://cn.calcuworld.com/%E6%B3%A2%E6%96%AF%E6%97%A5%E5%8E%86
 					console.log(da)
 					console.log(persianToGregorian(da))
