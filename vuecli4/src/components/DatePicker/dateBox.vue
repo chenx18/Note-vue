@@ -64,6 +64,7 @@
 			};
 		},
 		mounted(){
+			console.log(this.$parent.show)
 		},
 
 		methods: {

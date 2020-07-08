@@ -18,6 +18,7 @@
 <script>
 	export default {
 		name: 'DatePanel',
+		// inject:['inputThis'],
     props: {
       YMD: Object,
     },
@@ -27,7 +28,8 @@
 			};
 		},
 		mounted(){
-      console.info('datePanel',this.$attrs);
+			console.info('datePanel',this.$attrs);
+			// console.log('provide/inject使用测试',this.inputThis)
 		},
 
 		methods: {

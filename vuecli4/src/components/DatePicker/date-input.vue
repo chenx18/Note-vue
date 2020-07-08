@@ -33,8 +33,11 @@
 		},
 		mounted(){
 		},
-
+		// provide() {
+		// 	return {inputThis: this}
+		// },
 		methods: {
+			
 			setCurrentValue(value) {
 				const value_format = this.$attrs['value-format'] || 'yyyy-MM-dd hh:mm';
 				const format = this.$attrs['format'] || 'yyyy-MM-dd hh:mm';
