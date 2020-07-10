@@ -2,20 +2,16 @@
   <div class="calendar" :class="dateType===4?'timepan':''" v-if="show" @mousedown="$emit('dateMD')" >
     <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
     <div class="calendar__header">
-      <div class="header__pre" @click="handlePreMonth">
-				<i class="vkelico vk-prev"></i>
-			</div>
+      <div class="header__pre" @click="handlePreMonth"></div>
       <div class="header__title">
 				<a @click="dateType=1">
-					{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}} 
+						{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}}
 				</a>
 				<a v-if="types ==='datetime'" @click="dateType=4">
 					{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}
 				</a>
       </div>
-      <div class="header__next" @click="handleNextMonth">
-				<i class="vkelico vk-next"></i>
-			</div>
+      <div class="header__next" @click="handleNextMonth"></div>
     </div>
 
     <!-- 日历 -->
@@ -44,7 +40,7 @@
 <script>
   import DatePanel from './datePanel'
 	import TimePanel from './timePanel'
-	import {GetTodayCalendarInPersian} from './calendar'
+	import {GetTodayCalendarInPersian, getTodayGregorian, leap_persian,calcPersian} from './calendar'
 	export default {
 		name: 'DateBox',
 		inheritAttrs: false,
@@ -68,43 +64,38 @@
 			};
 		},
 		mounted(){
+			// https://cn.calcuworld.com/%E6%B3%A2%E6%96%AF%E6%97%A5%E5%8E%86
 		},
 
 		methods: {
 			// 初始化时间
 			initData(val){
-				let time = Date.parse(val);
-				if(this.lang == 'fa-IR'){
-					if(time){
-						let d = new Date(time);
-						this.Year = d.getFullYear();
-						this.Month = d.getMonth()+1;
-						this.Day = d.getDate();
-						this.Hour =	d.getHours();
-						this.Minute = d.getMinutes();
-					}else{
-						let {year,month,day,hour,minute,weekday} = GetTodayCalendarInPersian(time);
-						this.Year = year;
-						this.Month = month;
-						this.Day = day;
-						this.Hour =	hour;
-						this.Minute = minute;
-					}
-				} else {
-					let d = time? new Date(time): new Date();
+				let t = Date.parse(val);
+				console.log('init-',t)
+				if(t){
+					let d = new Date(t);
 					this.Year = d.getFullYear();
 					this.Month = d.getMonth()+1;
 					this.Day = d.getDate();
 					this.Hour =	d.getHours();
 					this.Minute = d.getMinutes();
+					console.log(this.Year,this.Month,this.Day,this.Hour,this.Minute)
+				}else{
+					let {year,month,date,hour,minute,day} = GetTodayCalendarInPersian();
+					this.Year = year;
+					this.Month = month;
+					this.Day = date;
+					this.Hour =	hour;
+					this.Minute = minute;
+					console.log(this.Year,this.Month,this.Day,this.Hour,this.Minute)
 				}
 			},
 
 			// 上一个月
 			handlePreMonth() {
-				if (this.Month === 1) {
+				if (this.Month === 0) {
 					this.Year = this.Year - 1
-					this.Month = 12
+					this.Month = 11
 					// this.Day = 1
 				} else {
 					this.Month = this.Month - 1
@@ -115,9 +106,9 @@
 
 			// 下一个月
 			handleNextMonth() {
-				if (this.Month === 12) {
+				if (this.Month === 11) {
 					this.Year = this.Year + 1
-					this.Month = 1
+					this.Month = 0
 					// this.Day = 1
 				} else {
 					this.Month = this.Month + 1
@@ -158,26 +149,23 @@
 					+ Minute.toString().padStart(2,"0");
 				this.dateType = type&&type===1? 1 : this.dateType;
 				this.$emit('submint',value, type)
+				// console.log(value)
+				// console.log(this.dateType)
 			},
 		},
 		computed: {
 			// 组件类型: 日历+时间（datetime） or 日历（date）
 			types() {
 				return this.$attrs&&this.$attrs.types || 'datetime'
-			},
-			lang() {
-				return this.$i18n.locale;
 			}
 		},
 		watch:{
 			value: {
 				handler(newval,oldval){
-					this.initData(newval,oldval);
+					// console.log(newval)
+					this.initData(newval);
 				},
 				immediate: true
-			},
-			lang(val) {
-				this.initData(this.value);
 			}
 		},
 		components:{
@@ -219,8 +207,46 @@
     		color: #606266;
 			}
 
-			.header__pre,.header__next {
-				cursor: pointer;
+			.header__pre {
+				height: 12px;
+				width: 12px;
+				position: relative;
+
+				&:after {
+					content: " ";
+					display: inline-block;
+					height: 9px;
+					width: 9px;
+					border-width: 2px 2px 0 0;
+					border-color: #c8c8cd;
+					border-style: solid;
+					transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0) rotate(180deg);
+					position: absolute;
+					top: 50%;
+					margin-top: -4px;
+					right: 2px;
+				}
+			}
+
+			.header__next {
+				height: 12px;
+				width: 12px;
+				position: relative;
+
+				&:after {
+					content: " ";
+					display: inline-block;
+					height: 9px;
+					width: 9px;
+					border-width: 2px 2px 0 0;
+					border-color: #c8c8cd;
+					border-style: solid;
+					transform: matrix(0.71, 0.71, -0.71, 0.71, 0, 0);
+					position: absolute;
+					top: 50%;
+					margin-top: -4px;
+					right: 2px;
+				}
 			}
 		}
 		.ymdhmsave{

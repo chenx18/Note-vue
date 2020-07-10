@@ -4,7 +4,7 @@ import trees from './../utils/tree.json'
 
 Vue.use(VueRouter)
 
-const routes = [
+export const routes = [
   {
     path: '/',
     name: 'Home',
@@ -15,7 +15,31 @@ const routes = [
         path: '/index',
         component: resolve => require(['@/views/home/home'], resolve),
         name: 'Home',
-        children: []
+        redirect: '/Idatepicker',
+        children: [
+          { 
+            path: '/Idatepicker',
+            component: resolve => require(['@/views/Idatepicker'], resolve),
+            name: 'Idatepicker',
+            meta: {
+              FunId: 0,
+              menuName: '日期时间选择',
+              name: 'Idatepicker',
+              affix: true
+            },
+          },
+          { 
+            path: '/IFrom',
+            component: resolve => require(['@/views/IFrom'], resolve),
+            name: 'IFrom',
+            meta: {
+              FunId: 1,
+              menuName: '表单组件',
+              name: 'IFrom',
+              affix: true
+            },
+          }
+        ]
       },
       {
         path: '/doecs',

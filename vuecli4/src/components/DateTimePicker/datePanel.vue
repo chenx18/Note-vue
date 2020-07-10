@@ -6,8 +6,8 @@
     </ul>
     <ul class="main_date">
       <li class="date_item" @click="handleDayClick(item)"
-        v-for="(item, index) in displayDaysPerMonthT(YMD.Year)[YMD.Month-1]" :key="item.type + item.content + `${index}`">
-        <span :class="` ${(item.type === 'pre' || item.type === 'next') ? 'date_item_not' : ''} ${(item.content === YMD.Day && item.type === 'normal') && 'date_item_today'}`">
+        v-for="(item, index) in displayDaysPerMonthT(YMD.Year)[YMD.Month - 1]" :key="item.type + item.content + `${index}`">
+        <span :class="`${(item.type === 'pre' || item.type === 'next') ? 'date_item_not' : ''} ${(item.content === YMD.Day && item.type === 'normal') && 'date_item_today'}`">
           {{item.content}}
         </span>
       </li>
@@ -18,39 +18,29 @@
 <script>
 	export default {
 		name: 'DatePanel',
+		// inject:['inputThis'],
     props: {
-      YMD: Object,
+			YMD: Object,
     },
 		data() {
 			return {
-				calendarHeader: [
-					this.$lang("Common.Sun", "日"), 
-					this.$lang("Common.Mon", "一"),
-					this.$lang("Common.Tue", "二"),
-					this.$lang("Common.Wed", "三"),
-					this.$lang("Common.Thu", "四"),
-					this.$lang("Common.Fri", "五"),
-					this.$lang("Common.Sat", "六")
-				],
+				calendarHeader: ["日", "一", "二", "三", "四", "五", "六"],
+				// calendarHeader: ["دوشنبه", "یکشنبه","چهارشنبه", "سه شنبه","شنبه", "جمعه", "پنج شنبه"],
+
 			};
 		},
 		mounted(){
+			// console.log('provide/inject使用测试',this.inputThis)
 		},
 
 		methods: {
 			// 计算天数
 			displayDaysPerMonthT(year) {
-				let daysInMonth = [];
-				if(this.lang == 'fa-IR') {
-					// 波斯 伊朗：定义每个月的天数，如果是闰年第12月为30天
-					daysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
-					if (((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682) daysInMonth[11] = 29;  // true为闰
-				}else{
-					// 常规日历： 定义每个月的天数，如果是闰年第二月改为29天
-					daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-					if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) daysInMonth[1] = 29;
+				//定义每个月的天数，如果是闰年第12月为30天
+				let daysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
+				if (((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682) {
+					daysInMonth[11] = 29;
 				}
-				
 				let daysPreMonth = [].concat(daysInMonth);
 				daysPreMonth.unshift(daysPreMonth.pop());
 				let addDaysFromPreMonth = new Array(12).fill(null).map((item, index) => {
@@ -115,14 +105,7 @@
 				}
 			},
 		},
-		computed:{
-			lang() {
-        return this.$i18n.locale;
-      }
-		},
-		watch: {
-			lang(val) {
-			}
+		components:{
 		}
 	};
 </script>
@@ -168,10 +151,8 @@
       box-sizing: border-box;
       text-align: center;
       cursor: pointer;
-			position: relative;
-			&:hover{
-				color: #409eff;
-			}
+      position: relative;
+
       span {
         width: 24px;
         height: 24px;
