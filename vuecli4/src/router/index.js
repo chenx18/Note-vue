@@ -38,6 +38,17 @@ export const routes = [
               name: 'IFrom',
               affix: true
             },
+          },
+          { 
+            path: '/Notice',
+            component: resolve => require(['@/components/Notice'], resolve),
+            name: 'Notice',
+            meta: {
+              FunId: 2,
+              menuName: '弹窗',
+              name: 'Notice',
+              affix: true
+            },
           }
         ]
       },
