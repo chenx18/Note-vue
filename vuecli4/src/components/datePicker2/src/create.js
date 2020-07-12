@@ -8,7 +8,7 @@ function create(Component, props) {
   const vm = new Vue({
     render(h){
       // render 函数将传入组件配置对象转换为虚拟 dom
-      console.log(h(Component, { props }));
+      // console.log(h(Component, { props }));
       return h(Component, { props });
     }
   }).$mount()  // 执行挂载函数，但未指定挂载目标，表示只执行初始工作

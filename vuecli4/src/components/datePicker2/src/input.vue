@@ -2,7 +2,7 @@
 	<div class="date_box">
 		<div class="input_box" style="width: 100%">
 			<span class="input__prefix"><i class="el-input__icon el-icon-time"></i></span>
-			<input type="text" :value="displayVal" @input="onInput" v-bind="$attrs" @focus="inputFocus" >
+			<input id="date-input" type="text" :value="displayVal" @input="onInput" v-bind="$attrs" @focus="inputFocus" >
 			<span v-if="displayVal" class="input__suffix"><i class="el-input__icon el-icon-circle-close" @click="cleanTime"></i></span>
 		</div>
 	</div>
@@ -39,8 +39,8 @@
 
       // 输入框获得焦点时
 			inputFocus(e){
-        console.log(this.popup);
-        if(this.popup) this.popup.hide();
+        let old = document.getElementById("vdatewrapper");
+				if (old) document.body.removeChild(old);
         const {x, y, width, height, top, right, bottom, left} = e.target.getBoundingClientRect()
         this.offset ={ x, y, width, height, right, bottom, left, top: top + height};
         this.createPopup()

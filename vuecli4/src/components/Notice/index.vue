@@ -11,8 +11,8 @@
 
     <br>
     <div>
-      <vk-date-picker2 type="time" v-model="startTime" placeholder="请选择开始时间"/>
-      <vk-date-picker2 type="time" v-model="endTime" placeholder="请选择结束时间"/>
+      <vk-date-picker2 type="datetime" v-model="startTime" placeholder="请选择开始时间"/>
+      <vk-date-picker2 type="datetime" v-model="endTime" placeholder="请选择结束时间"/>
     </div>
 
   </div>
@@ -38,17 +38,6 @@ export default {
       })
       notice.show();
     },
-
-    inputFus(e){
-      console.log('focus', e)
-      console.log('target',e.target.getBoundingClientRect());
-
-      const notice = creare(InputPopup, {
-        title: '标题1',
-        message: '弹窗内容'
-      })
-      notice.show();
-    } 
   }
 }
 </script>

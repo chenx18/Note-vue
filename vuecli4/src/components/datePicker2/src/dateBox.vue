@@ -1,10 +1,8 @@
 <template>
-<div class="picker_wrapper"  @click="hide">
-  <div class="calendar" :class="dateType===4?'timepan':''" v-if="isShow" 
-		:style="{top:offset.top+'px', left: offset.left+'px'}"
-		@mousedown="$emit('dateMD')">
+  <div id="vdatewrapper" ref="vdatewrapper" class="picker_wrapper" :class="dateType===4?'timepan':''" v-if="isShow" 
+		:style="{top:offset.top+'px', left: offset.left+'px'}">
     <div x-arrow="" class="popper__arrow" style="left: 35px;"></div>
-    <div class="calendar__header" >
+    <div class="picker_wrapper__header" >
       <div class="header__pre" @click="handlePreMonth">
 				<i class="vkelico vk-prev"></i>
 			</div>
@@ -22,10 +20,10 @@
     </div>
 
     <!-- 日历 -->
-    <DatePanel v-if="dateType===1" :YMD="{Year,Month,Day}" @handleDay="handleDay" v-bind="$attrs"/>
+    <DatePanel v-show="dateType===1" :YMD="{Year,Month,Day}" @handleDay="handleDay" v-bind="$attrs"/>
 
     <!-- 时钟 -->
-    <TimePanel v-else-if="dateType!==1&&types==='datetime'" @getHHmm="getHHmm" :HHMM="[Hour,Minute]" v-bind="$attrs"/>
+    <TimePanel v-show="dateType!==1&&types==='datetime'" @getHHmm="getHHmm" :HHMM="[Hour,Minute]" v-bind="$attrs"/>
 
     <!-- 确定 -->
     <div class="ymdhmsave" >
@@ -42,13 +40,12 @@
 			</div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
   import DatePanel from './datePanel'
 	import TimePanel from './timePanel'
-	import {GetTodayCalendarInPersian} from './calendar'
+	import {GetTodaypicker_wrapperInPersian} from './calendar'
 	export default {
 		name: 'DateBox',
     props: {
@@ -65,20 +62,36 @@
 				Hour:	'',
 				Minute: '',
 				dateType: 1,	/*dateType 1:年月日，2：年月，3：年，4：时-分，5：年月日时分*/
+				inputId: null
 			};
 		},
+		created(){
+			
+		},
 		mounted(){
+			window.addEventListener('click',this.onContains,false)
 		},
 
 		methods: {
+			// 监听
+			onContains(e){
+				if(!e)return
+					let id = e.target.id;
+					let el = this.$refs.vdatewrapper;
+					if(id!=='date-input' && (el&&!el.contains(e.target))){
+						this.hide()
+				}
+			},
 			// 显示
 			show(){
 				this.isShow = true;
 			},
 			// 关闭
 			hide(){
-				console.log(this.isShow)
+				window.removeEventListener('click',this.onContains,false);
 				this.isShow = false;
+				
+				
 				console.log(this.isShow)
 			},
 			// 初始化时间
@@ -93,7 +106,7 @@
 				// 		this.Hour =	d.getHours();
 				// 		this.Minute = d.getMinutes();
 				// 	}else{
-				// 		let {year,month,day,hour,minute,weekday} = GetTodayCalendarInPersian(time);
+				// 		let {year,month,day,hour,minute,weekday} = GetTodaypicker_wrapperInPersian(time);
 				// 		this.Year = year;
 				// 		this.Month = month;
 				// 		this.Day = day;
@@ -199,11 +212,7 @@
 </script>
 
 <style lang="scss" scope>
-.picker_wrapper{
-	width: 100%;
-	height: 100%;
-}
-	.calendar {
+	.picker_wrapper {
 		// width: 326px;
 		margin: 7px 0;
 		position: fixed;
@@ -216,7 +225,7 @@
 		// &.timepan{
 		// 	width: 255px;
 		// }
-		.calendar__header {
+		.picker_wrapper__header {
 			margin: 12px;
 			text-align: center;
 			display: flex;
