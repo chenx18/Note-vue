@@ -10,7 +10,7 @@
 				<a @click="dateType=1">
 					{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}} 
 				</a>
-				<a v-if="types ==='datetime'" @click="dateType=4">
+				<a v-if="datetype ==='datetime'" @click="dateType=4">
 					{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}
 				</a>
       </div>
@@ -20,10 +20,10 @@
     </div>
 
     <!-- 日历 -->
-    <DatePanel v-show="dateType===1" :YMD="{Year,Month,Day}" @handleDay="handleDay" v-bind="$attrs"/>
+    <DatePanel v-show="dateType===1" :YMD="{Year,Month,Day}" @handleDay="handleDay"/>
 
     <!-- 时钟 -->
-    <TimePanel v-show="dateType!==1&&types==='datetime'" @getHHmm="getHHmm" :HHMM="[Hour,Minute]" v-bind="$attrs"/>
+    <TimePanel v-show="dateType!==1&&datetype==='datetime'" @getHHmm="getHHmm" :HHMM="[Hour,Minute]"/>
 
     <!-- 确定 -->
     <div class="ymdhmsave" >
@@ -31,7 +31,7 @@
 				<!-- <a @click="dateType=1">
 					{{Year}}-{{Month.toString().padStart(2,"0")}}-{{Day.toString().padStart(2,"0")}}
 				</a>
-				<a v-if="types ==='datetime'" @click="dateType=4">
+				<a v-if="datetype ==='datetime'" @click="dateType=4">
 					{{Hour.toString().padStart(2,"0")}}:{{Minute.toString().padStart(2,"0")}}
 				</a> -->
 			</div>
@@ -51,7 +51,11 @@
     props: {
       value: String,
 			offset: Object,
-			submit: Function
+			submit: Function,
+			datetype:{
+				type: String,
+				default: 'datetime'
+			}
     },
 		data() {
 			return {
@@ -90,9 +94,6 @@
 			hide(){
 				window.removeEventListener('click',this.onContains,false);
 				this.isShow = false;
-				
-				
-				console.log(this.isShow)
 			},
 			// 初始化时间
 			initData(val){
@@ -152,7 +153,7 @@
 			// 选择日
 			handleDay(val) {
 				this.Day = val;
-				if(this.types === 'datetime'){
+				if(this.datetype === 'datetime'){
 					this.dateType = 4;
 					this.confirm()
 				}else{
@@ -185,10 +186,6 @@
 			},
 		},
 		computed: {
-			// 组件类型: 日历+时间（datetime） or 日历（date）
-			types() {
-				return this.$attrs&&this.$attrs.types || 'datetime'
-			},
 			// lang() {
 			// 	return this.$i18n.locale;
 			// }

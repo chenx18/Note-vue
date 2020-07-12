@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="time_panel">
     <div class="hhmm" >
       <div class="hh" v-if="!show">
         <a v-for="a in 24" :style="hhPst(a)" :key="a"
@@ -89,7 +89,7 @@
         let hh = parseInt(this.hhmm[0]);
         let h12 = hh<13 ? hh : hh-12;
         let rt = (h12-1)*30-60;
-        let w = hh<13 ? 78 : 48;
+        let w = hh<13 ? 76 : 48;
         return {
           transform:"rotate("+rt+"deg)",
           width:w+"px"
@@ -116,13 +116,16 @@
 </script>
 
 <style lang="scss" scope>
+.time_panel{
+  padding: 0 15px;
+}
 .hhmm {
 	width: 220px;
 	height: 220px;
 	position: relative;
 	background: #ebebeb;
 	border-radius: 120px;
-	margin: 7px auto 11px
+	margin: 7px auto 11px;
 }
 .hh, .mm {
 	position: absolute;
@@ -243,7 +246,7 @@
 	background: #04bbb7;
 }
 .mm .a-line {
-	width: 82px;
+	width: 80px;
 	top: 5px;
 	left: 14px;
 }

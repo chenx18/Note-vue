@@ -2,87 +2,78 @@
 	<div class="date_box">
 		<div class="input_box" style="width: 100%">
 			<span class="input__prefix"><i class="el-input__icon el-icon-time"></i></span>
-			<input type="text" :value="displayVal" @input="onInput" v-bind="$attrs"
-        @focus="inputFocus" @blur="inputBlur" @mousedown="inputMD">
+			<input id="date-input" type="text" :value="displayVal" @input="onInput" v-bind="$attrs" @focus="inputFocus">
 			<span v-if="displayVal" class="input__suffix"><i class="el-input__icon el-icon-circle-close" @click="cleanTime"></i></span>
 		</div>
-
-		<DateBox ref="childMethod" :value="displayVal" :show="show" v-bind="$attrs" @submint="submint" @dateMD="dateMD" />
 	</div>
 </template>
 
 <script>
-	import {formatDate} from '@/utils/date'
-	import DateBox from './dateBox'
+  import create from './createEle'
+  import {formatDate} from '@/utils/date'
+  import Popup from './dateBox'
 	export default {
-		name: 'IragDatePicker',
-		inheritAttrs: false,
+		name: 'input',
     props: {
       value: {
-        type:[String, Number],
+        type:[String, Number, Date],
         default: ''
-      },
+			},
+			type:{
+				type:String,
+				default: 'datetime'
+			}
     },
 		data() {
 			return {
 				displayVal: '',
 				evTag:'',
-				show: true,
+        show: false,
+				offset:{},
+        popup: null
 			};
 		},
 		mounted(){
-			
+			console.log()
 		},
+
 		methods: {
-			
-			setCurrentValue(value) {
-				const value_format = this.$attrs['value-format'] || 'yyyy-MM-dd hh:mm';
-				const format = this.$attrs['format'] || 'yyyy-MM-dd hh:mm';
+			onInput(e){
+				this.$emit('input', e.target.value)
+      },
+
+      // 输入框获得焦点时
+			inputFocus(e){
+        let old = document.getElementById("vdatewrapper");
+				if (old) document.body.removeChild(old);
+        const {x, y, width, height, top, right, bottom, left} = e.target.getBoundingClientRect()
+        this.offset ={ x, y, width, height, right, bottom, left, top: top + height};
+        this.createPopup()
+      },
+
+      //创建日历
+      createPopup(){
+        const _this = this;
+        this.popup = create(Popup, {
+          value: this.displayVal,
+					offset: this.offset,
+					datetype: this.type,
+          submit: (val) => _this.setValue(val)
+        })
+        this.popup.show()
+      },
+
+      // 设置value
+      setValue(value) {
+				const value_format = this.type === 'datetime' ? this.$attrs['value-format'] || 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd';
+				const format = this.type === 'datetime' ? this.$attrs['format'] || 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd';
 				if (value === this.displayVal) return;     
 				this.displayVal = formatDate(value, format);
 				let modelVal = formatDate(value, value_format);
 				let dateUTC = new Date(modelVal).toISOString();
 				this.$emit('input', dateUTC)
-			},
-			onInput(event){
-				let value = event.target.value;      
-				this.$emit('input', value)
-				// console.log('onInput', this.evTag||'', this.show)
-			},
-			inputFocus(){
-				// return;
-				if(this.evTag!="imd") this.show = true;
-				else this.evTag = "";
-				// console.log('inputFocus', this.evTag||'', this.show)	
-			},
-			inputMD(){
-				// return;
-				// console.log('inputMD',this.evTag)
-				if(this.evTag === 'lmd') {
-					this.$refs.childMethod.dateType = 1;
-					// console.log(this.$refs.childMethod.dateType)
-				}
-				this.evTag = "imd";
-				this.show = !this.show;
-				// console.log('inputMD', this.evTag||'', this.show)	
-			},
-			inputBlur(){
-				// console.log('inputBlur')
-				if(this.evTag!="lmd") this.show = false;	
-				// console.log('inputBlur', this.evTag||'', this.show)			
-			},
-			dateMD(){
-				// console.log('dateMD')
-				this.evTag = "lmd";
-				// console.log('dateMD',this.evTag||'', this.show)
-			},
-			submint(val,label){
-				this.setCurrentValue(val);
-				if(label&&label===1){
-					this.show = false;
-					this.evTag = "";
-				}
-			},
+      },
+      
 			// 清除
 			cleanTime(){
 				this.displayVal = '';
@@ -91,15 +82,10 @@
 			
 		},
 		components:{
-			DateBox
+		},
+		computed: {
 		},
 		watch:{
-			value: {
-				handler(newval,oldval){
-					this.setCurrentValue(newval);
-				},
-				immediate: true
-			}
 		}
 	};
 </script>
@@ -156,7 +142,7 @@
 			height: 28px;
 			line-height: 40px;
 			outline: none;
-			padding: 0 15px 0 30px;
+			padding: 0 30px;
 			transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 			width: 100%;
 		}

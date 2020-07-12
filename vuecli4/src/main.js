@@ -4,18 +4,14 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
-import vkDatePicker from './components/DatePicker/index'
-import vkDatePicker2 from './components/datePicker2/index'
-import IragDatePicker from './components/DateTimePicker/index'
+import VDatePicker from './components/VDatePicker/index'
 
 import axios from 'axios'
 Vue.prototype.$axios= axios
 
 Vue.config.productionTip = false
 Vue.use(axios);
-Vue.use(vkDatePicker)
-Vue.use(vkDatePicker2)
-Vue.use(IragDatePicker)
+Vue.use(VDatePicker)
 Vue.use(ElementUI)
 
 new Vue({

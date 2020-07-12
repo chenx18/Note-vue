@@ -8,13 +8,6 @@
     <div>
       <button @click="open"> 打开弹窗 </button>
     </div>
-
-    <br>
-    <div>
-      <vk-date-picker2 type="datetime" v-model="startTime" placeholder="请选择开始时间"/>
-      <vk-date-picker2 type="datetime" v-model="endTime" placeholder="请选择结束时间"/>
-    </div>
-
   </div>
 </template>
 
