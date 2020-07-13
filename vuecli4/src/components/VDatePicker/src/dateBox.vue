@@ -66,18 +66,18 @@
 				Hour:	'',
 				Minute: '',
 				dateType: 1,	/*dateType 1:年月日，2：年月，3：年，4：时-分，5：年月日时分*/
-				inputId: null
 			};
 		},
 		created(){
 			
 		},
 		mounted(){
+			// 添加全局监听事件，实现点击 非时间日期控件 隐藏
 			window.addEventListener('click',this.onContains,false)
 		},
 
 		methods: {
-			// 监听
+			// 全局监听事件，实现点击 非时间日期控件 隐藏
 			onContains(e){
 				if(!e)return
 					let id = e.target.id;
