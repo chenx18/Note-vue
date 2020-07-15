@@ -49,6 +49,17 @@ export const routes = [
               name: 'Notice',
               affix: true
             },
+          },
+          { 
+            path: '/tree',
+            component: resolve => require(['@/components/Tree'], resolve),
+            name: 'tree',
+            meta: {
+              FunId: 2,
+              menuName: '树组件',
+              name: 'Tree',
+              affix: true
+            },
           }
         ]
       },
