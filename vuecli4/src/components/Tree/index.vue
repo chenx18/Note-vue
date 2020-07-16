@@ -1,25 +1,30 @@
 <template>
   <div>
     <tree-node :model="treeDate" />
+
+    <!-- md文档 -->
+    <div class="markdown" v-html="md"></div>
   </div>
+
+
 </template>
 
 <script>
-import Tree from './Tree'
-import TreeNode from './TreeNode'
-export default {
-  data(){
-    return{
-      treeDate:{
+  import Tree from './Tree'
+  import TreeNode from './TreeNode'
+  import treeMark from './treeMark.md'
+  export default {
+    data() {
+      return {
+        md: treeMark,
+        treeDate: {
           title: '树组件',
-          children:[
-            {
+          children: [{
               title: '01 树组件1级'
             },
             {
               title: '02 树组件1级',
-              children:[
-                {
+              children: [{
                   title: '01 树组件2级'
                 },
                 {
@@ -33,14 +38,15 @@ export default {
             }
           ]
         },
-       
-      
+
+
+      }
+    },
+    components: {
+      TreeNode
     }
-  },
-  components:{
-    TreeNode
   }
-}
+
 </script>
 
 <style>

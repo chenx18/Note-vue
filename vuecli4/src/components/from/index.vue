@@ -10,10 +10,11 @@
       <x-form-item>
         <button @click="submit"> 登录 </button>
       </x-form-item>
-      <x-form-item>
-        <button @click="open"> 打开弹窗 </button>
-      </x-form-item>
     </x-form>
+
+
+     <!-- md文档 -->
+    <div class="markdown" v-html="md"></div>
   </div>
 </template>
 
@@ -21,12 +22,12 @@
 import XInput from './XInput';
 import XForm from './XForm';
 import XFormItem from './XFormItem';
-import create from './../Notice/create';
-import Notice from './../Notice';
+import FornMark from './formMark.md'
 export default {
   name: "Form",
   data() {
     return {
+      md: FornMark,
       formData:{
         userName: '',
         userPWD:''
@@ -44,14 +45,6 @@ export default {
         console.log(isValif)
       })
     },
-
-    open(){
-      const notice = create(Notice, {
-        title: '弹窗',
-        message: '内容'
-      })
-      notice.show();
-    }
   },
   computed: {},
   watch: {},

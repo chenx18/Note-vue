@@ -57,6 +57,7 @@ import Sidebar from './sidebar'
       flex: auto;
       padding: 10px;
       box-sizing: border-box;
+      overflow-y: scroll;
     }
   }
 </style>

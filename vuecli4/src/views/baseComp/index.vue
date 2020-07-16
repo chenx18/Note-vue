@@ -1,20 +1,22 @@
 <template>
-  <x-from />
+  <!-- 组件化常用技术 -->
+  <div class="markdown" v-html="md"></div>
 </template>
 
 <script>
-import XFrom from '@/components/from';
+import compt from './compt.md'  // 组件化常用技术
 export default {
   name: "IFrom",
   data() {
-    return {};
+    return {
+      md: compt
+    };
   },
   mounted() {},
   methods: {},
   computed: {},
   watch: {},
   components:{
-    XFrom
   }
 }
 </script>

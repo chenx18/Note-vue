@@ -15,27 +15,38 @@ export const routes = [
         path: '/index',
         component: resolve => require(['@/views/home/home'], resolve),
         name: 'Home',
-        redirect: '/Idatepicker',
+        redirect: '/componentBase',
         children: [
           { 
-            path: '/Idatepicker',
-            component: resolve => require(['@/views/Idatepicker'], resolve),
-            name: 'Idatepicker',
+            path: '/componentBase',
+            component: resolve => require(['@/views/baseComp'], resolve),
+            name: 'ComponentBase',
             meta: {
-              FunId: 0,
-              menuName: '日期时间选择',
-              name: 'Idatepicker',
+              FunId: 1,
+              menuName: '组件化常用技术',
+              name: 'ComponentBase',
               affix: true
-            },
+            }
           },
           { 
             path: '/IFrom',
-            component: resolve => require(['@/views/IFrom'], resolve),
+            component: resolve => require(['@/components/from'], resolve),
             name: 'IFrom',
             meta: {
               FunId: 1,
               menuName: '表单组件',
               name: 'IFrom',
+              affix: true
+            },
+          },
+          { 
+            path: '/ISlot',
+            component: resolve => require(['@/components/slots'], resolve),
+            name: 'ISlot',
+            meta: {
+              FunId: 1,
+              menuName: '插槽',
+              name: 'ISlot',
               affix: true
             },
           },
@@ -60,7 +71,19 @@ export const routes = [
               name: 'Tree',
               affix: true
             },
-          }
+          },
+          { 
+            path: '/Idatepicker',
+            component: resolve => require(['@/views/Idatepicker'], resolve),
+            name: 'Idatepicker',
+            meta: {
+              FunId: 0,
+              menuName: '日期时间选择',
+              name: 'Idatepicker',
+              affix: true
+            },
+          },
+          
         ]
       },
       {

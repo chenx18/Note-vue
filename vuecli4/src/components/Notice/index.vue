@@ -1,25 +1,23 @@
 <template>
   <div>
-    <p>1. 弹窗组件特点是在当前 vue 实例之外独立存在，通常挂载于 body</p>
-    <p>2. 它们是通过 js 动态创建，不需要在任何组件声明</p>
-
-    <br>
-
     <div>
       <button @click="open"> 打开弹窗 </button>
     </div>
+
+    <!-- md文档 -->
+    <div class="markdown" v-html="md"></div>
   </div>
 </template>
 
 <script>
 import creare from './create';
 import Notice from './notice';
+import NoticeMark from './noticeMark.md'
 export default {
   name: 'notice',
   data(){
     return{
-      startTime:"",
-      endTime:""
+      md: NoticeMark
     }
   },
   methods: {
