@@ -82,6 +82,16 @@ export const routes = [
               name: 'Idatepicker',
               affix: true
             },
+          },{ 
+            path: '/Lifecycle',
+            component: resolve => require(['@/views/Lifecycle'], resolve),
+            name: 'Lifecycle',
+            meta: {
+              FunId: 0,
+              menuName: '生命周期',
+              name: 'Lifecycle',
+              affix: true
+            },
           },
           
         ]
