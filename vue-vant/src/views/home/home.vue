@@ -38,7 +38,7 @@ export default {
     }
   },
   created(){
-    alert(this.$route.query.code)
+    // alert(this.$route.query.code)
   },
   mounted() {
 
